@@ -13,12 +13,26 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import CachedIcon from "@mui/icons-material/Cached";
 import { TextField } from "@/ui/TextField";
 import { createPost } from "@/api/posts/posts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/ui/Button";
 import { POST_SIZE, SOCIAL_PLATFORM } from "@/constants/constants";
 import { CreatePostInput, Post } from "@/types/post/post";
+import { useRouter, useSearchParams } from "next/navigation";
+import { notify } from "@/utils/alert";
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const isNewUser = searchParams.get("new_user");
+
+    if (isNewUser) {
+      notify({ text: "User successfully registered", type: "success" });
+      router.replace("/", { scroll: false });
+    }
+  }, [searchParams]);
+
   const [post, setPost] = useState<Post | null>(null);
   const [postSettings, setPostSettings] = useState<CreatePostInput | null>(null);
   const [isLoading, setIsLoading] = useState(false);

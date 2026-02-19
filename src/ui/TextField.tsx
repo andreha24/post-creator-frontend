@@ -9,8 +9,8 @@ interface TextField {
   label: string;
   icon: any;
   placeholder: string;
-  registerName: string;
-  register: any;
+  registerName?: string;
+  register?: any;
   selectList?: SelectItem[];
   multiline?: boolean;
   defaultValue?: string;
@@ -33,7 +33,12 @@ export const TextField: React.FC<TextField> = ({
     </div>
 
     {selectList ? (
-      <MuiTextField select variant="filled" defaultValue={defaultValue} {...register(registerName)}>
+      <MuiTextField
+        select
+        variant="filled"
+        defaultValue={defaultValue}
+        {...(register && registerName ? register(registerName) : {})}
+      >
         {selectList.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
@@ -47,7 +52,7 @@ export const TextField: React.FC<TextField> = ({
         placeholder={placeholder}
         className="w-full"
         variant="filled"
-        {...register(registerName)}
+        {...(register && registerName ? register(registerName) : {})}
       />
     )}
   </div>
