@@ -1,4 +1,3 @@
-import { logoutUser } from "@/api/auth/auth";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -10,8 +9,10 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
     const status = error.response?.status;
+    const currentPath =
+      typeof window !== "undefined" ? window.location.pathname : "";
 
-    if (status === 401 || status === 403) {
+    if (status === 401 && currentPath !== "/login" && currentPath !== "/sign-up") {
       window.location.href = "/login";
     }
 

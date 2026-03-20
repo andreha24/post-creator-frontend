@@ -12,6 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { loginUser, registerUser } from "@/api/auth/auth";
 import useUserStore from "@/store/useUserStore";
 import { notify } from "@/utils/alert";
+import { useTranslation } from "react-i18next";
 
 interface CreateUserSchema {
   email: string;
@@ -20,6 +21,7 @@ interface CreateUserSchema {
 }
 
 export const Auth = () => {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const isLoginPage = pathname === "/login";
@@ -37,7 +39,10 @@ export const Auth = () => {
       const res = isLoginPage ? await loginUser(data) : await registerUser(data);
       setUser(res);
       reset();
-      notify({ text: isLoginPage ? "Welcome back 👋" : "Registration successful 🎉", type: "success" });
+      notify({
+        text: isLoginPage ? t("auth.welcomeToast") : t("auth.registeredToast"),
+        type: "success",
+      });
 
       router.push("/");
     } catch (error: any) {
@@ -50,12 +55,12 @@ export const Auth = () => {
     <>
       <div className="flex flex-col gap-4 mb-10">
         <h2 className="!text-4xl">
-          {isLoginPage ? "Create Amazing Social Media Content" : "Start Creating Amazing Content Today"}
+          {isLoginPage ? t("auth.heroLoginTitle") : t("auth.heroRegisterTitle")}
         </h2>
         <p className="text-secondary">
           {isLoginPage
-            ? "Generate engaging posts with AI-powered text and images for all your social platforms"
-            : "Join thousands of creators using AI to generate engaging social media posts"}
+            ? t("auth.heroLoginSubtitle")
+            : t("auth.heroRegisterSubtitle")}
         </p>
       </div>
 
@@ -67,15 +72,15 @@ export const Auth = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="min-w-[500px]">
           <div className="flex flex-col gap-2 !mb-4">
-            <h1 className="!text-2xl">{isLoginPage ? "Welcome Back" : "Create Account"}</h1>
+            <h1 className="!text-2xl">{isLoginPage ? t("auth.welcomeBack") : t("auth.createAccount")}</h1>
             <p className="text-secondary">
-              {isLoginPage ? "Sign in to your account to continue" : "Start generating amazing content today"}
+              {isLoginPage ? t("auth.loginSubtitle") : t("auth.registerSubtitle")}
             </p>
           </div>
 
           <div className="flex flex-col gap-5">
             <TextField
-              label="Email Address"
+              label={t("auth.emailLabel")}
               icon={<MailOutlineIcon />}
               placeholder="you@example.com"
               registerName="email"
@@ -84,27 +89,34 @@ export const Auth = () => {
 
             {!isLoginPage && (
               <TextField
-                label="Name"
+                label={t("auth.nameLabel")}
                 icon={<PersonIcon />}
-                placeholder="Enter your name"
+                placeholder={t("auth.namePlaceholder")}
                 registerName="name"
                 register={register}
               />
             )}
 
             <TextField
-              label="Password"
+              label={t("auth.passwordLabel")}
               icon={<LockIcon />}
-              placeholder={isLoginPage ? "Enter your password" : "Create a password"}
+              placeholder={isLoginPage ? t("auth.loginPasswordPlaceholder") : t("auth.registerPasswordPlaceholder")}
               registerName="password"
               register={register}
             />
 
             {!isLoginPage && (
-              <TextField label="Repeat Password" icon={<LockIcon />} placeholder="Confirm your password" />
+              <TextField
+                label={t("auth.repeatPassword")}
+                icon={<LockIcon />}
+                placeholder={t("auth.confirmPasswordPlaceholder")}
+              />
             )}
 
-            <Button label={isLoginPage ? "Sign In" : "Sign Up"} className="bg-blue-400 text-white" />
+            <Button
+              label={isLoginPage ? t("common.signIn") : t("common.signUp")}
+              className="bg-blue-400 text-white"
+            />
             <GoogleButton />
           </div>
         </form>

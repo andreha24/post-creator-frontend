@@ -1,4 +1,4 @@
-const BASIC_URL = "http://localhost:5000";
+const BASIC_URL = "http://localhost:5000/api";
 
 export const endpoints = {
   // auth
@@ -8,6 +8,8 @@ export const endpoints = {
 
   // posts
   createPost: `${BASIC_URL}/posts`,
+  getPostById: (id: string | number) => `${BASIC_URL}/posts/${id}`,
+  getPosts: `${BASIC_URL}/posts`,
 
   // user
   getUser: `${BASIC_URL}/user`,

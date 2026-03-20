@@ -3,9 +3,14 @@
 import { getUser } from "@/api/user/user";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import "@/i18n/i18n";
+import useUserStore from "@/store/useUserStore";
 import { Oswald } from "next/font/google";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import { applyTheme, getStoredTheme } from "@/utils/theme";
+import { syncI18nLanguageFromStorage } from "@/i18n/i18n";
 
 const oswald = Oswald({
   subsets: ["latin"],
@@ -17,15 +22,32 @@ const oswald = Oswald({
 // };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const getUserData = async () => {
-    const user = await getUser();
+  const setUser = useUserStore.use.setUser();
+  const pathname = usePathname();
 
-    console.log("USEEEEER", user);
+  const getUserData = async () => {
+    try {
+      const user = await getUser();
+      setUser(user);
+    } catch (error) {
+      setUser(null);
+    }
   };
 
   useEffect(() => {
-    getUserData();
-  }, []);
+    if (typeof window === "undefined") return;
+
+    if (pathname !== "/login" && pathname !== "/sign-up") {
+      getUserData();
+    }
+
+    if (!localStorage.getItem("lang")) {
+      localStorage.setItem("lang", "en");
+    }
+
+    syncI18nLanguageFromStorage();
+    applyTheme(getStoredTheme());
+  }, [pathname]);
 
   return (
     <html lang="en" className={oswald.className}>

@@ -19,8 +19,10 @@ import { POST_SIZE, SOCIAL_PLATFORM } from "@/constants/constants";
 import { CreatePostInput, Post } from "@/types/post/post";
 import { useRouter, useSearchParams } from "next/navigation";
 import { notify } from "@/utils/alert";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -28,7 +30,7 @@ export default function Home() {
     const isNewUser = searchParams.get("new_user");
 
     if (isNewUser) {
-      notify({ text: "User successfully registered", type: "success" });
+      notify({ text: t("home.registeredToast"), type: "success" });
       router.replace("/", { scroll: false });
     }
   }, [searchParams]);
@@ -70,8 +72,8 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="!text-4xl mb-5">Create Your AI-Powered Post</h1>
-      <p className="mb-10">Generate text and images for any social platform with advanced customization</p>
+      <h1 className="!text-4xl mb-5">{t("home.title")}</h1>
+      <p className="mb-10">{t("home.subtitle")}</p>
 
       <div className="flex gap-10 justify-between relative">
         {isLoading ? (
@@ -81,7 +83,7 @@ export default function Home() {
         ) : post ? (
           <div className="max-w-[600px] flex flex-col gap-4">
             <div className="flex w-full flex-col border gap-5 pb-4">
-              <Image src={post.image} className="w-full" width={400} height={400} alt="AI image" />
+              <Image src='/colorfull-bg.png' className="w-full" width={400} height={400} alt="AI image" />
               <h2 className="!text-xl px-4">{post.title}</h2>
 
               <div className="flex flex-col gap-2 px-4">
@@ -93,14 +95,14 @@ export default function Home() {
             <div className="flex gap-5 w-full">
               <Button
                 className="hover:bg-grey-200"
-                label="Back to Settings"
+                label={t("home.backToSettings")}
                 icon={<SettingsIcon color="primary" />}
                 onClick={() => setPost(null)}
               />
 
               <Button
                 className="hover:bg-grey-200"
-                label="Regenerate Post"
+                label={t("home.regeneratePost")}
                 icon={<CachedIcon color="primary" />}
                 onClick={regeneratePost}
               />
@@ -109,17 +111,17 @@ export default function Home() {
         ) : (
           <form className="w-[600px] flex flex-col gap-8 pb-4" onSubmit={handleSubmit(onSubmit)}>
             <TextField
-              placeholder="Enter your topic or idea..."
+              placeholder={t("home.form.topicPlaceholder")}
               icon={<TipsAndUpdatesIcon />}
-              label="Topic or Idea"
+              label={t("home.form.topicLabel")}
               register={register}
               registerName="topic"
             />
 
             <TextField
-              placeholder="Select social media platform"
+              placeholder={t("home.form.socialMediaPlaceholder")}
               icon={<AutoAwesomeIcon />}
-              label="Social Media Platform"
+              label={t("home.form.socialMediaLabel")}
               selectList={SOCIAL_PLATFORM}
               defaultValue={SOCIAL_PLATFORM[0].value}
               register={register}
@@ -127,9 +129,9 @@ export default function Home() {
             />
 
             <TextField
-              placeholder="Select Post Size"
+              placeholder={t("home.form.postSizePlaceholder")}
               icon={<TipsAndUpdatesIcon />}
-              label="Post Size"
+              label={t("home.form.postSizeLabel")}
               selectList={POST_SIZE}
               defaultValue={POST_SIZE[0].value}
               register={register}
@@ -137,9 +139,9 @@ export default function Home() {
             />
 
             <TextField
-              placeholder="Creative, Funny, Interesting..."
+              placeholder={t("home.form.postStylePlaceholder")}
               icon={<PaletteIcon />}
-              label="Post Style"
+              label={t("home.form.postStyleLabel")}
               register={register}
               registerName="style"
             />
@@ -149,8 +151,8 @@ export default function Home() {
                 <TagIcon color="primary" />
 
                 <div className="flex flex-col gap-1">
-                  <span>Include Hashtags</span>
-                  <span className="!text-sm text-secondary">Add relevant hashtags to your post</span>
+                  <span>{t("home.form.includeHashtags")}</span>
+                  <span className="!text-sm text-secondary">{t("home.form.includeHashtagsHint")}</span>
                 </div>
               </div>
 
@@ -162,15 +164,15 @@ export default function Home() {
             </div>
 
             <TextField
-              placeholder="Add your additional instructions..."
+              placeholder={t("home.form.additionalPlaceholder")}
               icon={<AddIcon />}
-              label="Additional Instructions"
+              label={t("home.form.additionalLabel")}
               register={register}
               registerName="additionals"
             />
 
             <Button
-              label="Generate Post"
+              label={t("home.form.generatePost")}
               className="hover:bg-gray-200 transition-colors duration-300"
               type="submit"
               disabled={isLoading}
