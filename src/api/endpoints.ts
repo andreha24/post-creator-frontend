@@ -10,6 +10,7 @@ export const endpoints = {
   createPost: `${BASIC_URL}/posts`,
   getPostById: (id: string | number) => `${BASIC_URL}/posts/${id}`,
   getPosts: `${BASIC_URL}/posts`,
+  deletePost: (id: string | number) => `${BASIC_URL}/posts/${id}`,
 
   // user
   getUser: `${BASIC_URL}/user`,

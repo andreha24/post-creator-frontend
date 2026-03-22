@@ -12,17 +12,6 @@ export const createPost = async (data: CreatePostInput): Promise<Post> => {
   }
 };
 
-export interface UserPost {
-  id: number;
-  createAt: string;
-  image: string;
-  title: string;
-  text: string;
-  tags: string | null;
-  isPublished: boolean;
-  platform: string;
-}
-
 export const getPostById = async (id: string | number): Promise<Post> => {
   try {
     const res = await axiosInstance.get<Post>(endpoints.getPostById(id));
@@ -33,13 +22,25 @@ export const getPostById = async (id: string | number): Promise<Post> => {
   }
 };
 
-export const getPosts = async (): Promise<UserPost[]> => {
+export const getPosts = async (): Promise<Post[]> => {
   try {
     
-    const res = await axiosInstance.get<UserPost[]>(endpoints.getPosts);
+    const res = await axiosInstance.get<Post[]>(endpoints.getPosts);
 
     return res.data;
   } catch (error) {
     throw new Error();
   }
 };
+
+export const deletePost = async (id: string | number) => {
+  try {
+    
+    const res = await axiosInstance.delete<string>(endpoints.deletePost(id));
+
+    return res.data;
+  } catch (error) {
+    throw new Error();
+  }
+};
+

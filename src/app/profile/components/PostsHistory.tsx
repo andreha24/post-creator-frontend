@@ -1,32 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { PostHistoryItem } from "./PostHistoryItem";
-import { getPosts, UserPost } from "@/api/posts/posts";
+
 import { useTranslation } from "react-i18next";
+import { Post } from "@/types/post/post";
+import usePostsStore from "@/store/usePostsStore";
+import { formatDate } from "@/utils/formatDate";
 
 export const PostsHistory = () => {
   const { t } = useTranslation();
-  const [posts, setPosts] = useState<UserPost[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const fetchPosts = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-
-      const data = await getPosts();
-      setPosts(data);
-    } catch (err) {
-      setError(t("profile.loadError"));
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const posts = usePostsStore.use.posts();
+  const isLoading = usePostsStore.use.isLoading();
+  const error = usePostsStore.use.error();
 
   const renderHistoryDetail = (count: number, detailTitle: string) => (
     <div className="flex justify-center items-center p-2 flex-col border border-gray-400 w-50 rounded-[8px]">
@@ -46,16 +31,6 @@ export const PostsHistory = () => {
 
     return platforms.size;
   }, [posts]);
-
-  const formatDate = (dateString: string) => {
-    if (!dateString) return "";
-
-    const date = new Date(dateString);
-
-    if (Number.isNaN(date.getTime())) return "";
-
-    return date.toLocaleString();
-  };
 
   return (
     <div className="flex flex-col gap-4 items-center mt-10">

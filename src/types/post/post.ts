@@ -1,8 +1,11 @@
 export interface Post {
+  id: number;
+  createAt: string;
+  image: string;
   title: string;
-  tags: string;
   text: string;
-  image: any;
+  tags: string | null;
+  platform: string;
 }
 
 

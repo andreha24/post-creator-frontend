@@ -39,7 +39,7 @@ export const Header = () => {
             <>
               <Link
                 className="app-surface-2 border app-border flex gap-3 items-center rounded-[8px] px-4 py-1"
-                href="/profile"
+                href="/profile?tab=settings"
               >
                 <div className="rounded-full bg-blue-400 w-10 h-10 flex justify-center items-center">
                   {avatarLetter}

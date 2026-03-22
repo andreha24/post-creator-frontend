@@ -9,6 +9,6 @@ export const GoogleButton = () => (
     label="Continue With Google"
     icon={<GoogleIcon />}
     className="text-black bg-white"
-    onClick={() => (window.location.href = "http://localhost:5000/auth/google")}
+    onClick={() => (window.location.href = "http://localhost:5000/api/auth/google")}
   />
 );

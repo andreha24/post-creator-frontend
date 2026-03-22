@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import { applyTheme, getStoredTheme } from "@/utils/theme";
 import { syncI18nLanguageFromStorage } from "@/i18n/i18n";
+import usePostsStore from "@/store/usePostsStore";
 
 const oswald = Oswald({
   subsets: ["latin"],
@@ -23,7 +24,13 @@ const oswald = Oswald({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const setUser = useUserStore.use.setUser();
+  const fetchPosts = usePostsStore.use.fetchPosts();
   const pathname = usePathname();
+
+  const handleLogin = async () => {
+    getUserData();
+    await fetchPosts();
+  };
 
   const getUserData = async () => {
     try {
@@ -39,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
     if (pathname !== "/login" && pathname !== "/sign-up") {
       getUserData();
+      fetchPosts();
     }
 
     if (!localStorage.getItem("lang")) {

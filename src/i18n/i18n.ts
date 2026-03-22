@@ -18,7 +18,6 @@ if (!i18n.isInitialized) {
     .use(initReactI18next)
     .init({
       resources,
-      // Keep initial render deterministic to avoid hydration mismatches.
       lng: defaultLanguage,
       fallbackLng: defaultLanguage,
       supportedLngs: supportedLanguages,

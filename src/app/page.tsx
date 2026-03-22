@@ -83,7 +83,7 @@ export default function Home() {
         ) : post ? (
           <div className="max-w-[600px] flex flex-col gap-4">
             <div className="flex w-full flex-col border gap-5 pb-4">
-              <Image src='/colorfull-bg.png' className="w-full" width={400} height={400} alt="AI image" />
+              <Image src={post.image} className="w-full" width={400} height={400} alt="AI image" />
               <h2 className="!text-xl px-4">{post.title}</h2>
 
               <div className="flex flex-col gap-2 px-4">

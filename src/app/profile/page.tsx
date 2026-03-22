@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { ProfileSettings } from "./components/ProfileSettings";
@@ -24,10 +25,27 @@ const TAB_VALUES = TABS.map((tab) => tab.value);
 
 export default function Profile() {
   const { t } = useTranslation();
-  const [activeTab, setAtciveTab] = useState(TAB_VALUES[0]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const tabFromUrl = searchParams.get("tab");
+  const initialTab = TAB_VALUES.includes(tabFromUrl ?? "") ? tabFromUrl! : TAB_VALUES[0];
+
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get("tab");
+    if (TAB_VALUES.includes(tabFromUrl ?? "")) {
+      setActiveTab(tabFromUrl!);
+    } else {
+      setActiveTab(TAB_VALUES[0]);
+    }
+  }, [searchParams]);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
-    setAtciveTab(newValue);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("tab", newValue);
+    router.push(`?${params.toString()}`);
   };
 
   const displayActiveTab = () =>
